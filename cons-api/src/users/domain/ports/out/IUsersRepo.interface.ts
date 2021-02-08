@@ -1,5 +1,5 @@
-import { IUser } from "../../entities/IUser.interface";
+import { IUser } from '../../entities/IUser.interface';
 
 export interface IUsersRepo {
-    create(data: IUser): Promise<void>;
+  create(data: IUser): Promise<void>;
 }
