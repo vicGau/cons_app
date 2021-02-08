@@ -53,48 +53,48 @@ export class Booking {
     if (room.company.id !== user.company.id) {
       throw new Error('Booking could not be saved.');
     }
-    // const newBookingStart = this.startDate.getTime();
-    // const newBookingEnd = this.endDate.getTime();
 
-    // const room = await getManager()
-    //   .getRepository(Rooms)
-    //   .findOne({
-    //     relations: ['bookings'],
-    //     where: { id: roomId },
-    //   });
+    const newBookingStart = new Date(this.startDate).getTime();
+    const newBookingEnd = new Date(this.endDate).getTime();
 
-    // if (room && room.bookings && room.bookings.length > 0) {
-    //   const bookingClash = room.bookings
-    //     .map((booking) => {
-    //       // Convert existing booking Date objects into number values
-    //       const existingBookingStart = new Date(booking.startDate).getTime();
-    //       const existingBookingEnd = new Date(booking.endDate).getTime();
+    const roomInfos = await getManager()
+      .getRepository(Rooms)
+      .findOne({
+        relations: ['bookings'],
+        where: { id: roomId },
+      });
 
-    //       if (
-    //         (newBookingStart >= existingBookingStart &&
-    //           newBookingStart < existingBookingEnd) ||
-    //         (existingBookingStart >= newBookingStart &&
-    //           existingBookingStart < newBookingEnd)
-    //       ) {
-    //         throw new Error(
-    //           `Booking could not be saved. There is a clash with an existing booking from ${moment(
-    //             existingBookingStart,
-    //           ).format('HH:mm')} to ${moment(existingBookingEnd).format(
-    //             'HH:mm on LL',
-    //           )}`,
-    //         );
-    //       }
-    //       return false;
-    //     })
-    //     .every(Boolean);
+    if (roomInfos && roomInfos.bookings && roomInfos.bookings.length > 0) {
+      const bookingClash = roomInfos.bookings
+        .map((booking) => {
+          const existingBookingStart = new Date(booking.startDate).getTime();
+          const existingBookingEnd = new Date(booking.endDate).getTime();
 
-    //   // Ensure the new booking is valid - the booking is for a future time)
-    //   const validAppointment =
-    //     newBookingStart < newBookingEnd &&
-    //     newBookingStart > new Date().getTime();
+          if (
+            (newBookingStart >= existingBookingStart &&
+              newBookingStart < existingBookingEnd) ||
+            (existingBookingStart >= newBookingStart &&
+              existingBookingStart < newBookingEnd)
+          ) {
+            throw new Error(
+              `Booking could not be saved. There is a clash with an existing booking from ${moment(
+                existingBookingStart,
+              ).format('HH:mm')} to ${moment(existingBookingEnd).format(
+                'HH:mm on LL',
+              )}`,
+            );
+          }
+          return false;
+        })
+        .every(Boolean);
 
-    //   return !bookingClash && validAppointment;
-    // }
+      // Ensure the new booking is valid - the booking is for a future time)
+      const validAppointment =
+        newBookingStart < newBookingEnd &&
+        newBookingStart > new Date().getTime();
+
+      return !bookingClash && validAppointment;
+    }
 
     return true;
   }

@@ -40,7 +40,6 @@ export class User {
   company: Companies;
 
   @OneToOne(() => Booking, (booking) => booking.user)
-  @JoinColumn()
   booking: Booking;
 
   @BeforeInsert()
