@@ -1,26 +1,29 @@
-import { IsString, IsOptional, IsNotEmpty, IsBoolean} from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class UsersInputDto {
-    
-    @IsString()
-    @IsNotEmpty()
-    readonly firstName: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly firstName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    readonly lastName: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly lastName: string;
 
-    @IsString()
-    @IsNotEmpty()
-    readonly email: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    readonly password: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly password: string;
 
-    @IsOptional()
-    readonly createdAt?: Date;
+  @IsNumber()
+  @IsNotEmpty()
+  readonly companyId: number;
 
-    @IsOptional()
-    readonly updatedAt?: Date;
+  @IsOptional()
+  readonly createdAt?: Date;
+
+  @IsOptional()
+  readonly updatedAt?: Date;
 }

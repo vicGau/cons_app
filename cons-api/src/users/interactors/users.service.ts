@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Companies } from 'src/booking/domain/entities/company.entity';
 import { Repository } from 'typeorm';
 import { UsersInputDto } from '../adapters/driving/dtos/UsersInput.dto';
-import { IUser } from '../domain/entities/IUser.interface';
 import { User } from '../domain/entities/user.entity';
 
 @Injectable()
@@ -13,7 +13,9 @@ export class UsersService {
   ) {}
 
   async create(user: UsersInputDto): Promise<void> {
-    const userInfo = await this.usersRepository.findOne({ where: { email: user.email } });
+    const userInfo = await this.usersRepository.findOne({
+      where: { email: user.email },
+    });
 
     if (userInfo) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
@@ -21,15 +23,23 @@ export class UsersService {
 
     try {
       const newUser: User = await this.usersRepository.create(user);
+
+      const company = new Companies();
+      company.id = user.companyId;
+
+      newUser.company = company;
       await this.usersRepository.save(newUser);
-    }
-    catch(e) {
+    } catch (e) {
       throw new Error(e);
     }
   }
 
-  async findOne(options: object): Promise<IUser> {
-    const user = await this.usersRepository.findOne(options);
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  async findOne(options: object): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      relations: ['company'],
+      ...options,
+    });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -37,9 +47,9 @@ export class UsersService {
     return user;
   }
 
-  async findAll(): Promise<IUser[]> {
-    const users = await this.usersRepository.find();
-    
+  async findAll(): Promise<User[]> {
+    const users = await this.usersRepository.find({ relations: ['company'] });
+
     if (!users) {
       throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
     }

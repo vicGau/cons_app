@@ -1,6 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, ValidationPipe } from '@nestjs/common';
-import { UserInfo } from 'os';
-import { IUser } from 'src/users/domain/entities/IUser.interface';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
+import { User } from 'src/users/domain/entities/user.entity';
 import { UsersService } from '../../../interactors/users.service';
 import { UsersInputDto } from '../dtos/UsersInput.dto';
 
@@ -9,22 +16,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body(new ValidationPipe()) user:  UsersInputDto): void {
+  create(@Body(new ValidationPipe()) user: UsersInputDto): void {
     this.usersService.create(user);
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<IUser> {
+  async getUser(@Param('id') id: string): Promise<User> {
     const user = await this.usersService.findOne({
       where: {
-        id: parseInt(id)
-      }
+        id: parseInt(id),
+      },
     });
     return user;
   }
 
   @Get()
-  async getUsers(): Promise<IUser[]> {
+  async getUsers(): Promise<User[]> {
     const users = await this.usersService.findAll();
     return users;
   }
