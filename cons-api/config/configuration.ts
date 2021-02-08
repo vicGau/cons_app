@@ -9,6 +9,7 @@ export default () => ({
     NAME: 'booking',
     ENTITIES: 'dist/**/*.entity{.ts,.js}',
     SYNCHRONIZE: true,
+    AUTOLOAD: true,
   }
 });
 

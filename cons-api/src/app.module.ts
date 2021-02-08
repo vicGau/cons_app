@@ -26,6 +26,7 @@ import configuration from '../config/configuration';
         database: configService.get<string>('DATABASE.NAME'),
         entities: [configService.get<string>('DATABASE.ENTITIES')],
         synchronize: configService.get<boolean>('DATABASE.SYNCHRONIZE'),
+        autoLoadEntities: configService.get<boolean>('DATABASE.AUTOLOAD'),
       } as TypeOrmModuleOptions),
       inject: [ConfigService]
     }),
