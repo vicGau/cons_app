@@ -6,9 +6,11 @@ import {
   BeforeInsert,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Companies } from 'src/booking/domain/entities/company.entity';
+import { Booking } from 'src/booking/domain/entities/booking.entity';
 
 @Entity('users')
 export class User {
@@ -33,9 +35,13 @@ export class User {
   @CreateDateColumn()
   updatedAt?: Date;
 
-  @ManyToOne(() => Companies, (company) => company.user)
+  @ManyToOne(() => Companies, (company) => company.users)
   @JoinColumn()
   company: Companies;
+
+  @OneToOne(() => Booking, (booking) => booking.user)
+  @JoinColumn()
+  booking: Booking;
 
   @BeforeInsert()
   async hashPassword() {
