@@ -10,6 +10,6 @@ export default () => ({
     ENTITIES: 'dist/**/*.entity{.ts,.js}',
     SYNCHRONIZE: true,
     AUTOLOAD: true,
-  }
+  },
 });
 
