@@ -19,8 +19,8 @@ export class UsersService {
     }
 
     try {
-      await this.usersRepository.create(user);
-      await this.usersRepository.save(user);
+      const newUser: User = await this.usersRepository.create(user);
+      await this.usersRepository.save(newUser);
     }
     catch(e) {
       throw new Error(e);
