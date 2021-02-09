@@ -31,13 +31,14 @@ services:
       - ./api:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - 5000:3000
+      - 5000:5000
 
   web:
     build: ./web
     restart: always
     environment:
       - NODE_ENV=development
+      - WEB_API_BASE_URL=http://api:5000/
     volumes:
       - ./web:/usr/src/app
     ports:

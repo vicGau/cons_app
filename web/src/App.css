@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+input[type='password'] {
+  font-family: caption;
+  letter-spacing: 5px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
