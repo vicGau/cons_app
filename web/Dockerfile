@@ -1,0 +1,11 @@
+FROM node:12.16.1-alpine
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+
+COPY . /usr/src/app
+
+CMD [ "npm", "run", "start" ]
