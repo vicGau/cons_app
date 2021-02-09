@@ -10,7 +10,6 @@ import {
   getManager,
 } from 'typeorm';
 import { Rooms } from './room.entity';
-import * as moment from 'moment';
 
 @Entity('booking')
 export class Booking {
@@ -31,11 +30,7 @@ export class Booking {
   @JoinColumn()
   room: Rooms;
 
-  @BeforeInsert()
-  public async checkBooking() {
-    const roomId = this.room.id;
-    const userId = this.user.id;
-
+  private async isUserAuthorized(roomId, userId) {
     const room = await getManager()
       .getRepository(Rooms)
       .findOne({
@@ -53,10 +48,10 @@ export class Booking {
     if (room.company.id !== user.company.id) {
       throw new Error('Booking could not be saved.');
     }
+    return true;
+  }
 
-    const newBookingStart = new Date(this.startDate).getTime();
-    const newBookingEnd = new Date(this.endDate).getTime();
-
+  private async checkBookingConflicts(newStartDate, newEndDate, roomId) {
     const roomInfos = await getManager()
       .getRepository(Rooms)
       .findOne({
@@ -65,37 +60,43 @@ export class Booking {
       });
 
     if (roomInfos && roomInfos.bookings && roomInfos.bookings.length > 0) {
-      const bookingClash = roomInfos.bookings
+      const conflicts = roomInfos.bookings
         .map((booking) => {
-          const existingBookingStart = new Date(booking.startDate).getTime();
-          const existingBookingEnd = new Date(booking.endDate).getTime();
+          const startDate = new Date(booking.startDate).getTime();
+          const endDate = new Date(booking.endDate).getTime();
 
           if (
-            (newBookingStart >= existingBookingStart &&
-              newBookingStart < existingBookingEnd) ||
-            (existingBookingStart >= newBookingStart &&
-              existingBookingStart < newBookingEnd)
+            (newStartDate >= startDate && newStartDate < endDate) ||
+            (newStartDate <= startDate && startDate < newEndDate)
           ) {
-            throw new Error(
-              `Booking could not be saved. There is a clash with an existing booking from ${moment(
-                existingBookingStart,
-              ).format('HH:mm')} to ${moment(existingBookingEnd).format(
-                'HH:mm on LL',
-              )}`,
-            );
+            throw new Error('Room is unavailable during this period of time');
           }
           return false;
         })
         .every(Boolean);
 
-      // Ensure the new booking is valid - the booking is for a future time)
-      const validAppointment =
-        newBookingStart < newBookingEnd &&
-        newBookingStart > new Date().getTime();
+      const isNewDateValid =
+        newStartDate < newEndDate && newStartDate > new Date().getTime();
 
-      return !bookingClash && validAppointment;
+      return !conflicts && isNewDateValid;
     }
+    return true;
+  }
 
+  @BeforeInsert()
+  public async checkBooking() {
+    const roomId = this.room.id;
+    const userId = this.user.id;
+
+    if (!(await this.isUserAuthorized(roomId, userId))) {
+      return false;
+    }
+    const newStartDate = new Date(this.startDate).getTime();
+    const newEndDate = new Date(this.endDate).getTime();
+
+    if (!(await this.checkBookingConflicts(newStartDate, newEndDate, roomId))) {
+      return false;
+    }
     return true;
   }
 }

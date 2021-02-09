@@ -16,8 +16,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body(new ValidationPipe()) user: UsersInputDto): void {
-    this.usersService.create(user);
+  async create(@Body(new ValidationPipe()) user: UsersInputDto): Promise<void> {
+    await this.usersService.create(user);
   }
 
   @Get(':id')
