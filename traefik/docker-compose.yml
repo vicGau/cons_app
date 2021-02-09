@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  traefik:
+    image: traefik:alpine
+    restart: unless-stopped
+    networks:
+      - front
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./${TRAEFIK_TOML:-traefik.toml}:/etc/traefik/traefik.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - data:/data
+
+volumes:
+  data:
+    name: traefik-data
+    driver: local
+
+networks:
+  front:
+    name: front
+    driver: bridge

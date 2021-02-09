@@ -1,0 +1,48 @@
+version: '3.5'
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=booking
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  
+  api:
+    build:
+      context: ./api
+      target: development
+    restart: always
+    command: npm run start:dev
+    environment:
+      - DATABASE_TYPE=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=booking
+      - DATABASE_ENTITIES=dist/**/*.entity{.ts,.js}
+      - DATABASE_SYNCHRONIZE=true
+      - DATABASE_AUTOLOAD=true
+    volumes:
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 5000:3000
+
+  web:
+    build: ./web
+    restart: always
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./web:/usr/src/app
+    ports:
+      - 3000:3000
+
+volumes:
+  db-data:
+    driver: local

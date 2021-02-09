@@ -1,0 +1,62 @@
+version: '3.2'
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: unless-stopped
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - back
+
+  api:
+    image: ${API_IMG}
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_TYPE=postgres
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=booking
+      - DATABASE_ENTITIES=dist/**/*.entity{.ts,.js}
+      - DATABASE_SYNCHRONIZE=true
+      - DATABASE_AUTOLOAD=true
+    networks:
+      - front
+      - back
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:${APP_HOST}; PathPrefixStrip:/api
+      - traefik.port=3000
+      - traefik.docker.network=front
+  
+  web:
+    image: ${WEB_IMG}
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NGINX_SERVER=demo.localhost
+    networks:
+      - front
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:${APP_HOST}
+      - traefik.port=3000
+      - traefik.docker.network=front
+
+networks:
+  back:
+    driver: bridge
+  front:
+    external: true
+
+volumes:
+  db-data:
+    driver: local
