@@ -7,8 +7,8 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { User } from 'src/users/domain/entities/user.entity';
-import { UsersService } from '../../../interactors/users.service';
+import { User } from '../../../users/domain/entities/user.entity';
+import { UsersService } from '../../interactors/users.service';
 import { UsersInputDto } from '../dtos/UsersInput.dto';
 
 @Controller('users')

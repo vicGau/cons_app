@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../users/domain/entities';
 import { Repository } from 'typeorm';
-import { BookingInputDto } from '../adapters/driving/dtos/BookingInputDto';
-import { Booking } from '../domain/entities/booking.entity';
-import { Rooms } from '../domain/entities/room.entity';
+import { BookingInputDto } from '../adapters/dtos/BookingInputDto';
+import { Booking, Rooms } from '../domain/entities';
+import { IBookingService } from '../domain/ports/in';
 
 @Injectable()
-export class BookingService {
+export class BookingService implements IBookingService {
   constructor(
     @InjectRepository(Booking)
-    private bookingRepository: Repository<Booking>,
+    readonly bookingRepository: Repository<Booking>,
     @InjectRepository(Rooms)
-    private roomRepository: Repository<Rooms>,
+    readonly roomRepository: Repository<Rooms>,
   ) {}
 
   async create(booking: BookingInputDto): Promise<void> {

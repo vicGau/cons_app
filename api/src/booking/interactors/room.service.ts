@@ -1,16 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/domain/entities/user.entity';
 import { Repository } from 'typeorm';
-import { BookingInputDto } from '../adapters/driving/dtos/BookingInputDto';
-import { Booking } from '../domain/entities/booking.entity';
-import { Rooms } from '../domain/entities/room.entity';
+import { Rooms } from '../domain/entities';
+import { IRoomService } from '../domain/ports/in';
 
 @Injectable()
-export class RoomService {
+export class RoomService implements IRoomService {
   constructor(
     @InjectRepository(Rooms)
-    private roomRepository: Repository<Rooms>,
+    readonly roomRepository: Repository<Rooms>,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/ban-types

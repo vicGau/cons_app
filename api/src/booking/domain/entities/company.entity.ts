@@ -1,4 +1,4 @@
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../../users/domain/entities';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Rooms } from './room.entity';
 

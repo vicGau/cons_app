@@ -7,8 +7,8 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { Booking } from 'src/booking/domain/entities/booking.entity';
-import { BookingService } from 'src/booking/interactors/booking.service';
+import { Booking } from '../../domain/entities';
+import { BookingService } from '../../interactors';
 import { BookingInputDto } from '../dtos/BookingInputDto';
 
 @Controller('booking')

@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookingController } from './adapters/driving/controllers/booking.controller';
-import { RoomController } from './adapters/driving/controllers/room.controller';
-import { Booking } from './domain/entities/booking.entity';
-import { Rooms } from './domain/entities/room.entity';
-import { BookingService } from './interactors/booking.service';
-import { RoomService } from './interactors/room.service';
+import { BookingController, RoomController } from './adapters/controllers';
+import { Booking, Rooms } from './domain/entities';
+import { BookingService, RoomService } from './interactors';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Booking, Rooms])],

@@ -9,8 +9,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Companies } from 'src/booking/domain/entities/company.entity';
-import { Booking } from 'src/booking/domain/entities/booking.entity';
+import { Companies, Booking } from '../../../booking/domain/entities';
 
 @Entity('users')
 export class User {

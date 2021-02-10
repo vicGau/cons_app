@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { Rooms } from 'src/booking/domain/entities/room.entity';
-import { RoomService } from 'src/booking/interactors/room.service';
+import { Rooms } from '../../domain/entities';
+import { RoomService } from '../../interactors';
 
 @Controller('room')
 export class RoomController {
