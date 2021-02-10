@@ -1,10 +1,10 @@
 import { BookingInputDto } from 'src/booking/adapters/dtos/BookingInputDto';
-import { Repository } from 'typeorm';
-import { Booking, Rooms } from '../../entities';
+import { Connection, Repository } from 'typeorm';
+import { Booking } from '../../entities';
 
 export interface IBookingService {
   readonly bookingRepository: Repository<Booking>;
-  readonly roomRepository: Repository<Rooms>;
+  readonly connection: Connection;
 
   create(booking: BookingInputDto): Promise<void>;
   // eslint-disable-next-line @typescript-eslint/ban-types

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/domain/entities';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { BookingInputDto } from '../adapters/dtos/BookingInputDto';
 import { Booking, Rooms } from '../domain/entities';
 import { IBookingService } from '../domain/ports/in';
@@ -11,13 +11,19 @@ export class BookingService implements IBookingService {
   constructor(
     @InjectRepository(Booking)
     readonly bookingRepository: Repository<Booking>,
-    @InjectRepository(Rooms)
-    readonly roomRepository: Repository<Rooms>,
+    readonly connection: Connection,
   ) {}
 
   async create(booking: BookingInputDto): Promise<void> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      const newBooking: Booking = await this.bookingRepository.create(booking);
+      const bookingRepository = queryRunner.manager.getRepository<Booking>(
+        'booking',
+      );
+      const newBooking: Booking = await bookingRepository.create(booking);
       const user = new User();
       user.id = booking.userId;
 
@@ -27,10 +33,16 @@ export class BookingService implements IBookingService {
       newBooking.user = user;
       newBooking.room = room;
 
-      await this.bookingRepository.save(newBooking);
-      await this.roomRepository.update(booking.roomId, { available: false });
+      await queryRunner.manager.save(newBooking);
+      const roomsRepository = queryRunner.manager.getRepository<Rooms>('rooms');
+
+      await roomsRepository.update(booking.roomId, { available: false });
+      await queryRunner.commitTransaction();
     } catch (e) {
+      await queryRunner.rollbackTransaction();
       throw new Error(e);
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -69,7 +81,25 @@ export class BookingService implements IBookingService {
       throw new HttpException('No booking found', HttpStatus.NOT_FOUND);
     }
 
-    await this.bookingRepository.delete(id);
-    await this.roomRepository.update(booking.room.id, { available: true });
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const bookingRepository = queryRunner.manager.getRepository<Booking>(
+        'booking',
+      );
+      await bookingRepository.delete(id);
+
+      const roomsRepository = queryRunner.manager.getRepository<Rooms>('rooms');
+      await roomsRepository.update(booking.room.id, { available: true });
+
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw new Error(e);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
