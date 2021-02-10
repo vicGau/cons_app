@@ -9,7 +9,7 @@ function Header(props) {
         <Grid container>
             <Grid item md={6}>
                 <Typography component="h2" variant="title2">
-                    {auth.firstName} {auth.lastName}
+                    Connected as: {auth.firstName} {auth.lastName}
                 </Typography>
             </Grid>
             <Grid item md={6}>

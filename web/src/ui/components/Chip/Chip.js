@@ -36,15 +36,15 @@ const Chip = ({ type, label, icon, className: classNameProp, ...other }) => {
     switch (type) {
         case 'error':
             iconProp = <CloseIcon fontSize="small" data-testid="closeIcon" />;
-            labelProp = 'Error';
+            labelProp = label || 'Error';
             break;
         case 'success':
             iconProp = <CheckIcon fontSize="small" data-testid="checkIcon" />;
-            labelProp = 'Success';
+            labelProp = label || 'Success';
             break;
         case 'warning':
             iconProp = <ErrorOutlineIcon fontSize="small" data-testid="warningIcon" />;
-            labelProp = 'Warning';
+            labelProp = label || 'Warning';
             break;
         default:
             iconProp = icon;

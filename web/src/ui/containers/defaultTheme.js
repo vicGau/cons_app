@@ -67,12 +67,6 @@ const defaultTheme = createMuiTheme({
       fontSize: '15px',
       lineHeight: '1.6',
     },
-    button: {
-      fontWeight: 400,
-      fontSize: '15px',
-      lineHeight: 1.6,
-      textTransform: 'none',
-    },
   },
   palette: {
     primary: {
@@ -97,14 +91,6 @@ const defaultTheme = createMuiTheme({
     MuiAppBar: {
       root: {
         color: '#0000',
-      },
-    },
-    MuiButton: {
-      root: {
-        borderRadius: '5px',
-        height: '44px',
-        textTransform: 'none',
-        lineHeight: 'unset'
       },
     },
     MuiChip: {

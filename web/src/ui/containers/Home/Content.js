@@ -33,11 +33,11 @@ function Content(props) {
                 Rooms list :
             </Typography>
 
-            <Table className={classes.table} aria-label="simple table">
+            <Table className={classes.table} aria-label="simple table" size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell>Room name</TableCell>
-                        <TableCell align="left">Available</TableCell>
+                        <TableCell align="left">Availability</TableCell>
                         <TableCell align="left"></TableCell>
                     </TableRow>
                 </TableHead>
@@ -49,12 +49,12 @@ function Content(props) {
                             </TableCell>
                             <TableCell align="left">
                                 {row.available ? 
-                                    <Chip type="success" label="Available" />
-                                : <Chip type="error" label="Not available" />}
+                                    <Chip type="success" label="Available" size="small" />
+                                : <Chip type="error" label="Not available" size="small" />}
                             </TableCell>
                             <TableCell align="left">
                                 {row.available &&
-                                <Button variant="contained" color="primary">Book</Button>
+                                <Button variant="contained" color="primary" size="small">Book</Button>
                                 }
                             </TableCell>
                         </TableRow>

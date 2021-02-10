@@ -1,66 +1,53 @@
-import { IconButton } from '@material-ui/core';
+import React from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import MuiAppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
-import React from 'react';
+import Button from '../../../components/Button/Button';
+import { logout } from '../../../../redux/actions/auth';
+import { AUTH_LOGIN_ROUTE } from '../../../../common/appRoutes';
 
-const useStyles = makeStyles((theme) => ({
+
+const useStyles = makeStyles({
   root: {
     flexGrow: 1,
-    zIndex: theme.zIndex.drawer + 1,
   },
   grow: {
     flexGrow: 1,
   },
-  toolbar: {
-    alignItems: 'flex-start',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(1),
-  },
-  logo: {
-    width: 100,
-  },
-  title: {
-    paddingTop: theme.spacing(2),
-  },
-  menuIcon: {
+  button: {
     color: 'white',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-}));
+  }
+});
 
 function AppBar(props) {
-  const { title } = props;
+  const { title, logout } = props;
   const classes = useStyles();
+  const history = useHistory();
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    props.toggleSidebar();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    logout();
+    history.push(AUTH_LOGIN_ROUTE);
   };
 
   return (
     <MuiAppBar position="fixed" className={classes.root}>
       <Toolbar>
-        <IconButton
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-          onClick={handleClick}
-        >
-          <MenuIcon className={classes.menuIcon} />
-        </IconButton>
-        
-        <Typography edge="start" className={classes.title} variant="h3">
+        <Typography edge="start" variant="h3">
           {title}
         </Typography>
         <div className={classes.grow} />
+        <Button className={classes.button} onClick={handleLogout}>Logout</Button>
       </Toolbar>
     </MuiAppBar>
   );
 }
 
-export default AppBar;
+const mapDispatchToProps = {
+  logout,
+}
+
+export default connect(null, mapDispatchToProps)(AppBar);
