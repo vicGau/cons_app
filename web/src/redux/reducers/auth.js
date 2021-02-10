@@ -4,8 +4,7 @@
 
 import { LOGIN } from "../actions/auth";
 
-const initialState = {
-}
+const initialState = {}
 
 /* reducer responsible for auth.user management */
 const authReducer = (state = initialState, action) => {

@@ -1,22 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import defaultTheme from '../defaultTheme';
 
-const styles = {
+const useStyles = makeStyles({
   wrapper: {
     // display: 'flex',
     // flexDirection: 'column',
     height: '100%',
   },
-};
+});
 
 const Wrapper = (props) => {
   const { children } = props;
-
+  const classes = useStyles();
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div style={styles.wrapper}>{children}</div>
+      <div className={classes.wrapper}>{children}</div>
     </ThemeProvider>
   );
 };

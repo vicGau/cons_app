@@ -6,6 +6,7 @@ import AppBar from './AppBar';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    height: '92vh',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
