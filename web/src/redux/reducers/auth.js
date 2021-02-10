@@ -2,7 +2,7 @@
  * Reducers related to authentification handling
  */
 
-import { LOGIN, LOGOUT } from "../actions/auth";
+import { LOGIN, LOGOUT, SET_USER } from "../actions/auth";
 
 const initialState = {}
 
@@ -13,6 +13,13 @@ const authReducer = (state = initialState, action) => {
       return action.payload;
     case LOGOUT:
       return {};
+    
+    case SET_USER:
+      const { password, ...userInfos } = action.payload;
+      return {
+        ...state,
+        ...userInfos,
+      }
     default:
       return state;
   }

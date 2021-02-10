@@ -1,28 +1,23 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import { connect } from 'react-redux';
 
 function Header(props) {
-    const { auth } = props;
+    const { firstName, lastName, companyName } = props;
 
     return (
         <Grid container>
-            <Grid item md={6}>
+            <Grid item md={6} sm={12}>
                 <Typography component="h2" variant="title2">
-                    Connected as: {auth.firstName} {auth.lastName}
+                    Connected as: {firstName} {lastName}
                 </Typography>
             </Grid>
-            <Grid item md={6}>
-                <Typography component="h2" variant="title2">
-                    Company : {auth.company.name}
+            <Grid item md={6} sm={12}>
+                <Typography component="h2" variant="title2" align="right">
+                    Company : {companyName}
                 </Typography>
             </Grid>
         </Grid>
     )
 }
 
-const mapStateToProps = state => ({
-    auth: state.auth,
-})
-
-export default connect(mapStateToProps)(Header);
+export default Header;
