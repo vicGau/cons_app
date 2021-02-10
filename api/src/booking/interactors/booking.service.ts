@@ -11,6 +11,8 @@ export class BookingService {
   constructor(
     @InjectRepository(Booking)
     private bookingRepository: Repository<Booking>,
+    @InjectRepository(Rooms)
+    private roomRepository: Repository<Rooms>,
   ) {}
 
   async create(booking: BookingInputDto): Promise<void> {
@@ -26,6 +28,7 @@ export class BookingService {
       newBooking.room = room;
 
       await this.bookingRepository.save(newBooking);
+      await this.roomRepository.update(booking.roomId, { available: false });
     } catch (e) {
       throw new Error(e);
     }

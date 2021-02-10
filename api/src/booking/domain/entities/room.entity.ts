@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
-  OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { Booking } from './booking.entity';
 import { Companies } from './company.entity';
@@ -24,7 +24,6 @@ export class Rooms {
   @JoinColumn()
   company: Companies;
 
-  @OneToMany(() => Booking, (booking) => booking.room)
-  @JoinColumn()
-  bookings: Booking[] | undefined;
+  @OneToOne(() => Booking, (booking) => booking.room)
+  booking: Booking;
 }
