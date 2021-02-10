@@ -1,21 +1,31 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockedJwtService } from '../../mocks/jwt';
 import { Repository } from 'typeorm';
 import { AuthService } from '../../auth/auth.service';
-import { UsersService } from './users.service';
+import { mockedJwtService } from '../../mocks/jwt';
+import { UsersService } from '../../users/interactors';
+import { RoomService } from './room.service';
 
-describe('UsersService', () => {
-  let service: UsersService;
+describe('BookingService', () => {
+  let service: RoomService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
+        RoomService,
         AuthService,
+        UsersService,
         {
           provide: JwtService,
           useValue: mockedJwtService,
+        },
+        {
+          provide: 'BookingRepository',
+          useClass: Repository,
+        },
+        {
+          provide: 'RoomsRepository',
+          useClass: Repository,
         },
         {
           provide: 'UserRepository',
@@ -24,7 +34,7 @@ describe('UsersService', () => {
       ],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    service = module.get<RoomService>(RoomService);
   });
 
   it('should be defined', () => {
