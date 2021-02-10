@@ -37,7 +37,7 @@ export class UsersService {
   // eslint-disable-next-line @typescript-eslint/ban-types
   async findOne(options: object): Promise<User> {
     const user = await this.usersRepository.findOne({
-      relations: ['company'],
+      relations: ['company', 'booking', 'booking.room'],
       ...options,
     });
     if (!user) {

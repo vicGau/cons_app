@@ -60,6 +60,16 @@ export class BookingService {
   }
 
   async deleteBooking(id: number): Promise<void> {
+    const booking = await this.bookingRepository.findOne({
+      where: { id },
+      relations: ['room'],
+    });
+
+    if (!booking) {
+      throw new HttpException('No booking found', HttpStatus.NOT_FOUND);
+    }
+
     await this.bookingRepository.delete(id);
+    await this.roomRepository.update(booking.room.id, { available: true });
   }
 }

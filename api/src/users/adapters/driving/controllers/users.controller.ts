@@ -21,11 +21,9 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<User> {
+  async getUser(@Param('id') id: number): Promise<User> {
     const user = await this.usersService.findOne({
-      where: {
-        id: parseInt(id),
-      },
+      where: { id },
     });
     return user;
   }
