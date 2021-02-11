@@ -12,7 +12,7 @@ import { UsersService } from '../../users/interactors';
 import { Rooms } from '../domain/entities';
 import { RoomService } from './room.service';
 
-describe('BookingService', () => {
+describe('RoomService', () => {
   let service: RoomService;
   let repo: Repository<Rooms>;
 
@@ -25,10 +25,6 @@ describe('BookingService', () => {
         {
           provide: JwtService,
           useValue: mockedJwtService,
-        },
-        {
-          provide: 'BookingRepository',
-          useClass: Repository,
         },
         {
           provide: 'RoomsRepository',

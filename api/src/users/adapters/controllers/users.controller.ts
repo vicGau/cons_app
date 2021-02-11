@@ -41,7 +41,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<void> {
-    await this.usersService.deleteUser(parseInt(id));
+  async deleteUser(@Param('id') id: number): Promise<void> {
+    await this.usersService.deleteUser(id);
   }
 }

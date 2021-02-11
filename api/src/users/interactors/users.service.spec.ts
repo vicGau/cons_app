@@ -2,8 +2,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   mockedJwtService,
-  mockUserRepo,
-  mockUserRepoFindOne,
   mockUserReturn,
   mockUserServiceFindOneParams,
   mockUsersInput,
