@@ -10,6 +10,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Retrieve a user and verifying the password
+   * @param {string} email User email
+   * @param {string} password User password
+   */
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne({ where: { email } });
     const isEqual = await bcrypt.compare(password, user.password);
@@ -22,6 +27,11 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Login function
+   * @param {string} user Populated by Passport during the passport-local authentication flow
+   * @returns {user} User object and jwt token
+   */
   async login(user: any) {
     const payload = { email: user.email, sub: user.id };
     return {

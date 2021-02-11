@@ -11,6 +11,11 @@ export class RoomService implements IRoomService {
     readonly roomRepository: Repository<Rooms>,
   ) {}
 
+  /**
+   * Method to get room informations
+   * @param {object} options TypeORM query object
+   * @returns {Rooms} Room informations
+   */
   // eslint-disable-next-line @typescript-eslint/ban-types
   async findOne(options: object): Promise<Rooms> {
     const room = await this.roomRepository.findOne({
@@ -24,6 +29,11 @@ export class RoomService implements IRoomService {
     return room;
   }
 
+  /**
+   * Method to get all room informations by company
+   * @param {number} id Room ID
+   * @returns {Rooms[]} Rooms array
+   */
   async findAllByCompany(id: number): Promise<Rooms[]> {
     const rooms = await this.roomRepository.find({
       where: { company: { id } },

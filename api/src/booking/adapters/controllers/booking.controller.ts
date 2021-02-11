@@ -17,6 +17,10 @@ import { BookingInputDto } from '../dtos/BookingInputDto';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
+  /**
+   * Endpoint to create a booking record
+   * @param {BookingInputDto} booking Booking needed infos
+   */
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(
@@ -25,13 +29,22 @@ export class BookingController {
     await this.bookingService.create(booking);
   }
 
+  /**
+   * Endpoint to get information about one booking
+   * @param {number} id Booking ID
+   * @returns {Booking} Booking infos object
+   */
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async get(@Param('id') id: number): Promise<Booking> {
-    const bookings = await this.bookingService.findOne({ where: { id } });
-    return bookings;
+    const booking = await this.bookingService.findOne({ where: { id } });
+    return booking;
   }
 
+  /**
+   * Endpoint to get all booking
+   * @returns {Booking[]} Bookings array
+   */
   @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(): Promise<Booking[]> {
@@ -39,6 +52,10 @@ export class BookingController {
     return bookings;
   }
 
+  /**
+   * Endpoint to delete a booking
+   * @param {number} id Booking ID
+   */
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteBooking(@Param('id') id: number): Promise<void> {

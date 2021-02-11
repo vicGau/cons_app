@@ -7,6 +7,11 @@ import { RoomService } from '../../interactors';
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
+  /**
+   * Endpoint to get information about one room
+   * @param {number} id Room ID
+   * @returns {Rooms} Room infos object
+   */
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async get(@Param('id') id: number): Promise<Rooms> {
@@ -14,6 +19,11 @@ export class RoomController {
     return room;
   }
 
+  /**
+   * Endpoint to get all rooms by company
+   * @param {number} id Company ID
+   * @returns {Rooms} Room infos object
+   */
   @UseGuards(JwtAuthGuard)
   @Get('company/:id')
   async getAllByCompanyId(@Param('id') id: number): Promise<Rooms[]> {

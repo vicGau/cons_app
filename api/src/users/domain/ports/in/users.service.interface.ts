@@ -1,4 +1,4 @@
-import { UsersInputDto } from 'src/users/adapters/dtos/UsersInput.dto';
+import { UsersInputDto } from '../../../adapters/dtos/UsersInput.dto';
 import { Repository } from 'typeorm';
 import { User } from '../../entities';
 

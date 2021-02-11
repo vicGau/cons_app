@@ -14,9 +14,16 @@ export class BookingService implements IBookingService {
     readonly connection: Connection,
   ) {}
 
+  /**
+   * Method to create a booking
+   * @param {BookingInputDto} booking Booking infos
+   */
   async create(booking: BookingInputDto): Promise<void> {
+    // Create a query runner to perform a database transaction
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
+
+    // Start database transaction
     await queryRunner.startTransaction();
 
     try {
@@ -37,15 +44,24 @@ export class BookingService implements IBookingService {
       const roomsRepository = queryRunner.manager.getRepository<Rooms>('rooms');
 
       await roomsRepository.update(booking.roomId, { available: false });
+
+      // Commit transaction if success
       await queryRunner.commitTransaction();
     } catch (e) {
+      // Rollback transaction if failed
       await queryRunner.rollbackTransaction();
       throw new Error(e);
     } finally {
+      // Release the connection
       await queryRunner.release();
     }
   }
 
+  /**
+   * Method to get booking informations
+   * @param {object} options TypeORM query object
+   * @returns {Booking} Booking informations
+   */
   // eslint-disable-next-line @typescript-eslint/ban-types
   async findOne(options: object): Promise<Booking> {
     const booking = await this.bookingRepository.findOne({
@@ -59,6 +75,10 @@ export class BookingService implements IBookingService {
     return booking;
   }
 
+  /**
+   * Method to get all bookings
+   * @returns {Booking[]} Bookings array
+   */
   async findAll(): Promise<Booking[]> {
     const bookings = await this.bookingRepository.find({
       relations: ['user', 'room'],
@@ -71,7 +91,12 @@ export class BookingService implements IBookingService {
     return bookings;
   }
 
+  /**
+   * Method to delete a booking
+   * @param {number} id Booking ID
+   */
   async deleteBooking(id: number): Promise<void> {
+    // Check if booking ID exists in the database
     const booking = await this.bookingRepository.findOne({
       where: { id },
       relations: ['room'],
@@ -81,8 +106,11 @@ export class BookingService implements IBookingService {
       throw new HttpException('No booking found', HttpStatus.NOT_FOUND);
     }
 
+    // Create a query runner to perform a database transaction
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
+
+    // Start database transaction
     await queryRunner.startTransaction();
 
     try {
@@ -94,11 +122,14 @@ export class BookingService implements IBookingService {
       const roomsRepository = queryRunner.manager.getRepository<Rooms>('rooms');
       await roomsRepository.update(booking.room.id, { available: true });
 
+      // Commit transaction if success
       await queryRunner.commitTransaction();
     } catch (e) {
+      // Rollback transaction if failed
       await queryRunner.rollbackTransaction();
       throw new Error(e);
     } finally {
+      // Release the connection
       await queryRunner.release();
     }
   }

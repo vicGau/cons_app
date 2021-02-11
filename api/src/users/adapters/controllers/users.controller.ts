@@ -17,12 +17,21 @@ import { UsersInputDto } from '../dtos/UsersInput.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  /**
+   * Endpoint to create a user
+   * @param {UsersInputDto} user User object
+   */
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body(new ValidationPipe()) user: UsersInputDto): Promise<void> {
     await this.usersService.create(user);
   }
 
+  /**
+   * Endpoint to get user informations
+   * @param {number} id User ID
+   * @returns {User} User informations
+   */
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getUser(@Param('id') id: number): Promise<User> {
@@ -32,6 +41,10 @@ export class UsersController {
     return user;
   }
 
+  /**
+   * Endpoint to get all users
+   * @returns {User[]} Users array
+   */
   @UseGuards(JwtAuthGuard)
   @Get()
   async getUsers(): Promise<User[]> {
@@ -39,6 +52,10 @@ export class UsersController {
     return users;
   }
 
+  /**
+   * Endpoint to delete a user
+   * @param {number} id User ID
+   */
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<void> {

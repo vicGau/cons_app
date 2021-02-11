@@ -11,7 +11,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: 'secretKey',
     });
   }
-
+  /**
+   * Function that parse JSON object
+   * @param {string} payload Decoded JSON by Passport
+   * @returns {object} return an object containing the userId and email properties
+   */
   async validate(payload: any) {
     return { userId: payload.sub, email: payload.email };
   }

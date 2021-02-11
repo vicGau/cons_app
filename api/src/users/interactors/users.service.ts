@@ -13,6 +13,10 @@ export class UsersService implements IUsersService {
     readonly usersRepository: Repository<User>,
   ) {}
 
+  /**
+   * Method to create a user
+   * @param {UsersInputDto} user User object
+   */
   async create(user: UsersInputDto): Promise<void> {
     const userInfo = await this.usersRepository.findOne({
       where: { email: user.email },
@@ -35,6 +39,11 @@ export class UsersService implements IUsersService {
     }
   }
 
+  /**
+   * Method to get user informations
+   * @param {object} options TypeORM query object
+   * @returns {User} User information
+   */
   // eslint-disable-next-line @typescript-eslint/ban-types
   async findOne(options: object): Promise<User> {
     const user = await this.usersRepository.findOne({
@@ -48,6 +57,10 @@ export class UsersService implements IUsersService {
     return user;
   }
 
+  /**
+   * Method to get all users informations
+   * @returns {User[]} Users array
+   */
   async findAll(): Promise<User[]> {
     const users = await this.usersRepository.find({ relations: ['company'] });
 
@@ -58,6 +71,10 @@ export class UsersService implements IUsersService {
     return users;
   }
 
+  /**
+   * Method to delete a user
+   * @param {number} id User ID
+   */
   async deleteUser(id: number): Promise<void> {
     await this.usersRepository.delete(id);
   }

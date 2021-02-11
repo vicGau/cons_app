@@ -26,6 +26,12 @@ export class Booking {
   @JoinColumn()
   room: Rooms;
 
+  /**
+   * Method to check if a user company ID equals to room ID
+   * @param {number} roomId Room ID
+   * @param {number} userId User ID
+   * @returns {boolean}
+   */
   public async isUserAuthorized(roomId, userId) {
     const room = await getManager()
       .getRepository(Rooms)
