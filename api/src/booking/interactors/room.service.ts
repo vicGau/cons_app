@@ -34,7 +34,7 @@ export class RoomService implements IRoomService {
     });
 
     if (!rooms) {
-      throw new HttpException('No bookings found', HttpStatus.NOT_FOUND);
+      throw new HttpException('No rooms found', HttpStatus.NOT_FOUND);
     }
 
     return rooms;

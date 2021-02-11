@@ -26,7 +26,7 @@ export class Booking {
   @JoinColumn()
   room: Rooms;
 
-  private async isUserAuthorized(roomId, userId) {
+  public async isUserAuthorized(roomId, userId) {
     const room = await getManager()
       .getRepository(Rooms)
       .findOne({
