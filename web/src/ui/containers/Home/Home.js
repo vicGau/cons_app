@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { Field } from 'formik';
 import MyBooking from './MyBooking';
 import { setUser } from '../../../redux/actions';
+import { GET_BOOKING_RESOURCE, GET_ROOMS_LIST_RESOURCE, GET_USER_RESOURCE, CREATE_BOOKING_RESOURCE } from '../../../common/APIResources';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -53,10 +54,7 @@ function Home(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: `/api/room/company/${auth.company.id}`,
-    }).then(({ data }) => {
+    axios.get(`${GET_ROOMS_LIST_RESOURCE}/${auth.company.id}`).then(({ data }) => {
       setRooms(data);
     })
   }, [auth.company.id]);
@@ -92,24 +90,20 @@ function Home(props) {
   }
 
   const handleBookingCancel = () => {
-    axios({
-      method: 'DELETE',
-      url: `/api/booking/${auth.booking.id}`,
-    }).then(() => {
-      handleCloseCancelPopIn();
-      axios({
-        method: 'GET',
-        url: `/api/room/company/${auth.company.id}`,
-      }).then(({ data }) => {
-        setRooms(data);
-      })
-      axios({
-        method: 'GET',
-        url: `/api/users/${auth.id}`,
-      }).then(({ data }) => {
-        setUser(data);
-      })
-    })
+    axios.delete(`${GET_BOOKING_RESOURCE}/${auth.booking.id}`)
+      .then(() => {
+        handleCloseCancelPopIn();
+
+        axios.get(`${GET_ROOMS_LIST_RESOURCE}/${auth.company.id}`)
+          .then(({ data }) => {
+            setRooms(data);
+          });
+
+        axios.get(`${GET_USER_RESOURCE}/${auth.id}`)
+          .then(({ data }) => {
+            setUser(data);
+          });
+      });
   }
 
   const handleFormSubmit = values => {
@@ -118,25 +112,20 @@ function Home(props) {
       roomId: popIn.data.roomId,
       userId: auth.id,
     }
-    axios({
-      method: 'POST',
-      url: '/api/booking',
-      data: bookingInfos,
-    }).then(() => {
-      handleClosePopIn();
-      axios({
-        method: 'GET',
-        url: `/api/room/company/${auth.company.id}`,
-      }).then(({ data }) => {
-        setRooms(data);
-      })
-      axios({
-        method: 'GET',
-        url: `/api/users/${auth.id}`,
-      }).then(({ data }) => {
-        setUser(data);
-      })
-    })
+    axios.post(CREATE_BOOKING_RESOURCE, bookingInfos)
+      .then(() => {
+        handleClosePopIn();
+
+        axios.get(`${GET_ROOMS_LIST_RESOURCE}/${auth.company.id}`)
+          .then(({ data }) => {
+            setRooms(data);
+          });
+
+        axios.get(`${GET_USER_RESOURCE}/${auth.id}`)
+          .then(({ data }) => {
+            setUser(data);
+          });
+      });
   }
   return (
     <Paper className={classes.paper}>
@@ -154,14 +143,12 @@ function Home(props) {
       />
 
       <Divider className={classes.divider} />
-      
+
       {auth.booking === null &&
         <>
           <Typography component="h1" variant="title1">
             Rooms list :
-      </Typography>
-
-
+          </Typography>
           <RoomsTable
             data={rooms}
             handleOpenPopIn={handleOpenPopIn}

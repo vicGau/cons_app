@@ -1,11 +1,11 @@
-import { makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
+import axios from 'axios';
 import { connect } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import { AUTH_API_BASE_URL, HOME_ROUTE, LOGIN_RESOURCE } from '../../../common';
 import { login } from '../../../redux/actions';
 import LoginForm from './forms/LoginForm';
-import axios from 'axios';
-import { useHistory } from "react-router-dom";
-import { HOME_ROUTE } from '../../../common/appRoutes';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   linkSignUpText: {
     textAlign: 'center'
-  }
-
+  },
 }));
 
 function Login(props) {
@@ -26,12 +25,8 @@ function Login(props) {
   const history = useHistory();
 
   const onSubmit = (values) => {
-    console.log(values)
-    axios({
-      method: 'POST',
-      url: `/api/auth/login`,
-      data: values,
-    }).then(({ data }) => {
+    axios.post(`${AUTH_API_BASE_URL}/${LOGIN_RESOURCE}`, values)
+    .then(({ data }) => {
         props.login(data);
         localStorage.setItem('token', data.access_token);
         history.push(HOME_ROUTE);
