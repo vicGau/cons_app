@@ -17,8 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /**
- * Modal is a custom wrapper of Material UI's Dialog components (Content, Actions, etc...),
- * it also make use of our custom `DialogTitle` component.
+ * Modal is a custom wrapper of Material UI's Dialog components (Content, Actions, etc...)
  */
 const Modal = ({
   title,

@@ -6,8 +6,6 @@ import defaultTheme from '../defaultTheme';
 
 const useStyles = makeStyles({
   wrapper: {
-    // display: 'flex',
-    // flexDirection: 'column',
     height: '100%',
   },
 });

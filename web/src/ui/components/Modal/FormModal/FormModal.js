@@ -17,8 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 /**
- * Modal is a custom wrapper of Material UI's Dialog components (Content, Actions, etc...),
- * it also make use of our custom `DialogTitle` component.
+ * FormModal is a custom wrapper of Material UI's Dialog components (Content, Actions, etc...) that includes Formik form
  */
 const ModalForm = ({
   initialValues,

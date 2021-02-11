@@ -7,6 +7,7 @@ import axios from 'axios';
 import store from './store';
 import './App.css';
 
+// Add Bearer token in Authorization header for all axios requests
 axios.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   config.headers.Authorization =  token ? `Bearer ${token}`: '';

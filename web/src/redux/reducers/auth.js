@@ -6,7 +6,7 @@ import { LOGIN, LOGOUT, SET_USER } from "../actions/auth";
 
 const initialState = {}
 
-/* reducer responsible for auth.user management */
+/* reducer responsible for auth management */
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN:
@@ -25,5 +25,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-/* Combine all reducers into the auth reducers */
 export default authReducer;
