@@ -25,12 +25,6 @@ const defaultTheme = createMuiTheme({
       fontSize: '20px',
       lineHeight: '1.5',
     },
-    h3bold: {
-      fontFamily: 'EY Interstate',
-      fontWeight: 700,
-      fontSize: '20px',
-      lineHeight: '1.5',
-    },
     h4: {
       fontFamily: 'Josefin Sans',
       fontWeight: 400,
