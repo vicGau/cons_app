@@ -1,5 +1,5 @@
 export default () => ({
-  APP_PORT: process.env.APP_PORT || 3000,
+  APP_PORT: process.env.APP_PORT || 5000,
   DATABASE: {
     TYPE: process.env.DATABASE_TYPE || 'postgres',
     HOST: process.env.DATABASE_HOST || 'localhost',
