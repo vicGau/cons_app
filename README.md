@@ -19,6 +19,19 @@ The booking system has the following functionalities:
 
 ## Run in production mode:
 
+#### CREATE .env file in live/ directory
+
+```
+POSTGRES_DB=booking
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_PORT=5432
+
+API_IMG=cons_app_api_prod
+WEB_IMG=cons_app_web_prod
+APP_HOST=demo.localhost
+```
+
 #### Build docker images
 
 - API: `cd api && docker build -t cons_app_api_prod .`
