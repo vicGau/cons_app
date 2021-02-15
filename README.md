@@ -26,7 +26,7 @@ The booking system has the following functionalities:
 
 #### Run traefik
 
-`cd live/traefik && TRAEFIK_TOML=traefik-no-ssl.toml docker-compose up -d`
+`cd live/traefik && docker-compose up -d`
 
 #### Run the app:
 
